@@ -12,6 +12,11 @@ use App\Http\Resources\ReplyResource;
 class ReplyController extends Controller
 {
 
+    public function index()
+    {
+        return ReplyResource::collection(Reply::latest()->get());
+    }
+
     public function listRepliesByQuestionId(Request $request)
     {
         return ReplyResource::collection(Question::find($request->question_id)->replies);
@@ -39,7 +44,6 @@ class ReplyController extends Controller
     public function show(Reply $reply)
     {
        return new ReplyResource($reply);
-       //return $reply;
     }
 
     

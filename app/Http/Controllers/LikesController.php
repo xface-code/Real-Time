@@ -13,7 +13,7 @@ class LikesController extends Controller
         $reply->likes()->create(
             [
                 //"user_id" => auth()->id(),
-                "user_id" => '1'
+                "user_id" => '4'
             ]
         );
         
@@ -21,7 +21,6 @@ class LikesController extends Controller
 
     public function dislike(Reply $reply)
     {
-        //$reply->like()->where(["user_id"=> auth()->id()])->first()->delete();
-        $reply->likes()->where(["user_id"=> '1'])->first()->delete();
+        $reply->likes()->where(["user_id"=> '4'])->first()->delete();
     }
 }
