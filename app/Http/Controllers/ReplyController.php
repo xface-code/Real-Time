@@ -2,30 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\Likes;
 use App\Model\Reply;
+use App\Model\Question;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use App\Http\Resources\ReplyResource;
 
 class ReplyController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function listRepliesByQuestionId(Request $request)
     {
-        //
+        return ReplyResource::collection(Question::find($request->question_id)->replies);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -35,7 +26,8 @@ class ReplyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Reply::create($request->all());
+        return response("Created",Response::HTTP_CREATED);
     }
 
     /**
@@ -46,20 +38,11 @@ class ReplyController extends Controller
      */
     public function show(Reply $reply)
     {
-        //
+       return new ReplyResource($reply);
+       //return $reply;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Model\Reply  $reply
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Reply $reply)
-    {
-        //
-    }
-
+    
     /**
      * Update the specified resource in storage.
      *
@@ -69,7 +52,8 @@ class ReplyController extends Controller
      */
     public function update(Request $request, Reply $reply)
     {
-        //
+        $reply->update($request->all());
+        return response("Udpated",Response::HTTP_ACCEPTED);
     }
 
     /**
@@ -80,6 +64,12 @@ class ReplyController extends Controller
      */
     public function destroy(Reply $reply)
     {
-        //
+        $likes = Likes::where('reply_id',$reply->id)->get();
+        foreach ($likes as $like) {
+            $like->delete();
+        }
+        $reply->delete();
+        return response("OK",Response::HTTP_ACCEPTED);
+
     }
 }
