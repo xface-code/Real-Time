@@ -8,6 +8,18 @@ use Illuminate\Http\Request;
 
 class LikesController extends Controller
 {
+
+    /**
+     * Create a new AuthController instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        //$this->middleware('auth:api');
+        $this->middleware('JWT');
+    }
+
     public function likeIt(Reply $reply)
     {
         $reply->likes()->create(
@@ -16,7 +28,6 @@ class LikesController extends Controller
                 "user_id" => '4'
             ]
         );
-        
     }
 
     public function dislike(Reply $reply)

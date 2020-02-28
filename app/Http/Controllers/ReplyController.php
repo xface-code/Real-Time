@@ -12,6 +12,17 @@ use App\Http\Resources\ReplyResource;
 class ReplyController extends Controller
 {
 
+    /**
+     * Create a new AuthController instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        //$this->middleware('auth:api');
+        $this->middleware('JWT', ['except' => ['index','show']]);
+    }
+
     public function index()
     {
         return ReplyResource::collection(Reply::latest()->get());
@@ -46,7 +57,7 @@ class ReplyController extends Controller
        return new ReplyResource($reply);
     }
 
-    
+
     /**
      * Update the specified resource in storage.
      *
